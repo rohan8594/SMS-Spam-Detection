@@ -1,3 +1,14 @@
+# File:        text_preprocess.py
+#
+# Author:      Rohan Patel
+#
+# Date:        05/09/2018
+#
+# Description: This script loads the sms spam data, organizes the data into a pandas dataframe, adds a new 
+#              feature (length of message) to the data, and applies some basic text pre-processing techniques 
+#              like stopword removal and punctuation removal. Finally, the processed dataframe is copied into 
+#			   a new csv file processed_msgs.csv
+
 import pandas as pd
 import nltk
 from nltk.corpus import stopwords
@@ -32,8 +43,9 @@ def main():
     #print(messages)
     messages['message'] = messages['message'].apply(text_process)
     
-    print('\n########## Clean Messages ##########\n')
+    print('\n######################## Processed Messages #########################\n')
     print(messages)
+    messages.to_csv('output/processed_msgs.csv', encoding='utf-8', index=False) #copy processed messages dataframe to a new csv file
 
 if __name__ == "__main__":
     main()
