@@ -7,7 +7,7 @@
 # Description: This script loads the sms spam data, organizes the data into a pandas dataframe, adds a new 
 #              feature (length of message) to the data, and applies some basic text pre-processing techniques 
 #              like stopword removal and punctuation removal. Finally, the processed dataframe is copied into 
-#			   a new csv file processed_msgs.csv
+#              a new csv file processed_msgs.csv
 
 import pandas as pd
 import nltk
