@@ -24,6 +24,9 @@ from sklearn.ensemble import AdaBoostClassifier
 from sklearn.ensemble import BaggingClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 
 def Tfidf_Vectorization(messages):
     '''
@@ -84,6 +87,13 @@ def main():
     accuracy = pd.DataFrame.from_items(pred_scores, orient = 'index', columns = ['Accuracy Rate'])
     print('\n')
     print(accuracy)
+
+    #plot accuracy scores in a bar plot
+    accuracy.plot(kind =  'bar', ylim=(0.85,1.0), edgecolor='black', figsize=(10,5))
+    plt.ylabel('Accuracy Score')
+    plt.title('Distribution by Classifier')
+    plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+    plt.show()
     
     '''
     train_classifier(mnb, X_train, y_train)
