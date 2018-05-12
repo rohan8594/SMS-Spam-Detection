@@ -27,6 +27,7 @@ from sklearn.metrics import classification_report
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+pd.set_option('display.max_colwidth', -1)
 
 def Tfidf_Vectorization(messages):
     '''
@@ -76,35 +77,44 @@ def main():
     classifiers = {'SVM': svm, 'Decision Tree': dtree, 'Multinomial NB': mnb, 'KNN': knn, 'Random Forest': rfc, 
                    'AdaBoost': ada_boost, 'Bagging Classifier': bagging_clf}
     
+    X_train2, X_test2 = train_test_split(messages['message'], test_size = 0.3, random_state = 101)
     pred_scores = []
+    pred = dict()
+    file = open('output/misclassified_msgs.txt', 'a', encoding='utf-8') # misclassified messages will be written in this
     for k, v in classifiers.items():
         train_classifier(v, X_train, y_train)
-        pred = predict_labels(v, X_test)
-        pred_scores.append((k, [accuracy_score(y_test, pred)]))
+        pred[k] = predict_labels(v, X_test)
+        pred_scores.append((k, [accuracy_score(y_test, pred[k])]))
         print('\n############### ' + k + ' ###############\n')
-        print(classification_report(y_test, pred))
-        
+        print(classification_report(y_test, pred[k]))
+
+        # write misclassified messages into a new text file
+        file.write('\n#################### ' + k + ' ####################\n')
+        file.write('\nMisclassified Spam:\n\n')
+        for msg in X_test2[y_test < pred[k]]:
+            file.write(msg)
+            file.write('\n')
+        file.write('\nMisclassified Ham:\n\n')
+        for msg in X_test2[y_test > pred[k]]:
+            file.write(msg)
+            file.write('\n')
+    file.close()
+
+    print('\n############### Accuracy Scores ###############')
     accuracy = pd.DataFrame.from_items(pred_scores, orient = 'index', columns = ['Accuracy Rate'])
     print('\n')
     print(accuracy)
+    print('\n')
 
+    '''
     #plot accuracy scores in a bar plot
     accuracy.plot(kind =  'bar', ylim=(0.85,1.0), edgecolor='black', figsize=(10,5))
     plt.ylabel('Accuracy Score')
     plt.title('Distribution by Classifier')
     plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     plt.show()
-    
+    sys.exit(0)
     '''
-    train_classifier(mnb, X_train, y_train)
-    pred = predict_labels(mnb, X_test)
-    
-    print(pred)
-    print('\n')
-    print('Accuracy Score:', accuracy_score(y_test, pred))
-    print('\n')
-    print(classification_report(y_test, pred))
-    '''
-    
+
 if __name__ == "__main__":
     main()
