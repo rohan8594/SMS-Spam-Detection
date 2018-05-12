@@ -4,7 +4,10 @@
 #
 # Date:        05/10/2018
 #
-# Description:
+# Description: This script contains the main sms classification code. We first load the processed 
+#              messages, convert each message into a bag of words and then into a tfidf vector 
+#              representation. Then we split the tfidf feature vector into training and test sets, 
+#              build our classifier on the training set, and test it on the test set.  
 
 import pandas as pd
 import pickle
