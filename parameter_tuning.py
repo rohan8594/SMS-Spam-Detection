@@ -26,10 +26,26 @@ def SVM_Tuning(X_train, X_test, y_train, y_test):
 
 def MNB_Tuning(X_train, X_test, y_train, y_test):
 
-	print('\n############### SVM ###############\n')
-	param_grid = {'alpha': np.arange(0.0, 1.05, 0.05)}
+	print('\n############### Multinomial NB ###############\n')
+	param_grid = {'alpha': np.arange(0.05, 1.05, 0.05)}
 
 	model = GridSearchCV(MultinomialNB(), param_grid, verbose = 1)
+	model.fit(X_train, y_train)
+
+	print('\nBest parameter:', model.best_params_)
+
+	pred = model.predict(X_test)
+
+	print('\nAccuracy Score:', accuracy_score(y_test, pred))
+	print('\n')
+	print(classification_report(y_test, pred))
+
+def DTree_Tuning(X_train, X_test, y_train, y_test):
+
+	print('\n############### Decision Tree ###############\n')
+	param_grid = {'min_samples_split': np.arange(2, 21, 1)}
+
+	model = GridSearchCV(DecisionTreeClassifier(), param_grid, verbose = 1)
 	model.fit(X_train, y_train)
 
 	print('\nBest parameter:', model.best_params_)
@@ -49,6 +65,7 @@ def main():
 
 	SVM_Tuning(X_train, X_test, y_train, y_test)
 	MNB_Tuning(X_train, X_test, y_train, y_test)
+	DTree_Tuning(X_train, X_test, y_train, y_test)
 
 if __name__ == "__main__":
     main()
