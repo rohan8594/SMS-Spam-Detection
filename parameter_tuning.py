@@ -1,3 +1,13 @@
+# File:        parameter_tuning.py
+#
+# Author:      Rohan Patel
+#
+# Date:        05/12/2018
+#
+# Description: This script uses scikit-learn's GridSearchCV to perform an exhaustive grid search.
+#              Exhaustive grid search is a way to select the best model out of a family of models
+#              by tuning the model parameters. 
+
 import pickle
 import numpy as np
 import pandas as pd
