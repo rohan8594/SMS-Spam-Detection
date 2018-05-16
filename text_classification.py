@@ -66,9 +66,9 @@ def main():
     tfidf_vect = Tfidf_Vectorization(messages)
     X_train, X_test, y_train, y_test = TrainTestSplit(tfidf_vect, messages)
     
-    svm = SVC(kernel = 'sigmoid', gamma = 1.0)
+    svm = SVC()
     dtree = DecisionTreeClassifier()
-    mnb = MultinomialNB(alpha = 0.2)
+    mnb = MultinomialNB()
     knn = KNeighborsClassifier()
     rfc = RandomForestClassifier()
     ada_boost = AdaBoostClassifier()

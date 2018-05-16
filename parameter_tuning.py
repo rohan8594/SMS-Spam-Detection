@@ -23,7 +23,7 @@ def SVM_Tuning(X_train, X_test, y_train, y_test):
 	print('\n############### SVM ###############\n')
 	param_grid = {'C':[0.1,1,10,100,1000],'gamma':[1,0.1,0.01,0.001,0.0001]}
 
-	model = GridSearchCV(SVC(kernel = 'sigmoid'), param_grid, verbose = 1)
+	model = GridSearchCV(SVC(), param_grid, verbose = 1)
 	model.fit(X_train, y_train)
 
 	print('\nBest parameter:', model.best_params_)
