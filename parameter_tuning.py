@@ -71,11 +71,15 @@ def main():
 	tfidf_vect = pickle.load(open("output/tfidf_vector.pickle", "rb"))
 	messages = pd.read_csv('output/processed_msgs.csv')
 
-	X_train, X_test, y_train, y_test = train_test_split(tfidf_vect, messages['label'], test_size = 0.3, random_state = 101)
+	# append our message length feature to the tfidf vector to produce the final feature vector we fit into our classifiers
+    len_feature = messages['length'].as_matrix()
+    feat_vect = np.hstack((tfidf_vect.todense(), len_feature[:, None]))
 
-	SVM_Tuning(X_train, X_test, y_train, y_test)
+	X_train, X_test, y_train, y_test = train_test_split(feat_vect, messages['label'], test_size = 0.3, random_state = 101)
+
 	MNB_Tuning(X_train, X_test, y_train, y_test)
-	DTree_Tuning(X_train, X_test, y_train, y_test)
+	#SVM_Tuning(X_train, X_test, y_train, y_test)
+	#DTree_Tuning(X_train, X_test, y_train, y_test)
 
 if __name__ == "__main__":
     main()

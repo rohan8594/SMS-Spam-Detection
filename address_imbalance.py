@@ -10,6 +10,7 @@
 
 import numpy as np
 import pandas as pd
+import text_preprocessing
 from sklearn.svm import SVC
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
@@ -37,7 +38,7 @@ def Tfidf_Vectorization(sms_data):
     2. Convert bag of words representation into tfidf vectorized representation for each message
     '''
     
-    bow_transformer = CountVectorizer(analyzer=text_process).fit(sms_data['message'])
+    bow_transformer = CountVectorizer(analyzer=text_preprocessing.text_process).fit(sms_data['message'])
     bow = bow_transformer.transform(sms_data['message']) # bag of words
 
     tfidf_transformer = TfidfTransformer().fit(bow)
@@ -50,10 +51,13 @@ def main():
     messages = pd.read_csv("output/processed_msgs.csv")
     
     balanced_data = Generate_balanced_dataset(messages)
-    
     tfidf_vect = Tfidf_Vectorization(balanced_data)
+
+    # append our message length feature to the tfidf vector to produce the final feature vector we fit into our classifiers
+    len_feature = messages['length'].as_matrix()
+    feat_vect = np.hstack((tfidf_vect.todense(), len_feature[:, None]))
     
-    X_train, X_test, y_train, y_test = train_test_split(tfidf_vect, balanced_data['label'], test_size=0.3, random_state=101)
+    X_train, X_test, y_train, y_test = train_test_split(feat_vect, balanced_data['label'], test_size=0.3, random_state=101)
     
     #SVM
     svm = SVC(C = 100, gamma = 0.01)
@@ -66,7 +70,7 @@ def main():
     print(accuracy_score(y_test, pred))
     
     #Multinomial Naive Bayes
-    mnb = MultinomialNB(alpha = 0.25)
+    mnb = MultinomialNB(alpha = 0.10000000000000001)
     mnb.fit(X_train, y_train)
     pred = mnb.predict(X_test)
     

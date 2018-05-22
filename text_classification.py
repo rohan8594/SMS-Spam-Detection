@@ -45,11 +45,11 @@ def Tfidf_Vectorization(messages):
     
     return tfidf_vect
 
-def TrainTestSplit(tfidf_vect, messages):
+def TrainTestSplit(feature_vect, messages):
     '''
     Split dataset into training and test sets. We use a 70/30 split.
     '''
-    X_train, X_test, y_train, y_test = train_test_split(tfidf_vect, messages['label'], test_size = 0.3, random_state = 101)
+    X_train, X_test, y_train, y_test = train_test_split(feature_vect, messages['label'], test_size = 0.3, random_state = 101)
     
     return X_train, X_test, y_train, y_test
 
@@ -64,7 +64,12 @@ def main():
     messages = pd.read_csv('output/processed_msgs.csv')
 
     tfidf_vect = Tfidf_Vectorization(messages)
-    X_train, X_test, y_train, y_test = TrainTestSplit(tfidf_vect, messages)
+
+    # append our message length feature to the tfidf vector to produce the final feature vector we fit into our classifiers
+    len_feature = messages['length'].as_matrix()
+    feat_vect = np.hstack((tfidf_vect.todense(), len_feature[:, None]))
+
+    X_train, X_test, y_train, y_test = TrainTestSplit(feat_vect, messages)
     
     svm = SVC()
     dtree = DecisionTreeClassifier()
