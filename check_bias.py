@@ -4,15 +4,18 @@
 #
 # Date:        05/17/2018
 #
-# Description: This script tests the learned classifier on a different dataset that can be found 
-#              in smsspamcollection/spam.xml in order to check for bias.
+# Description: This script loads a second message dataset that has been scraped from Dublin Institute
+#              of Technology's website in order to check the bias of our learned SVM and Multinomial
+#              NB classifiers. The classfiers are trained on the UCI dataset and tested on the Dublin 
+#              dataset.
 
 import pickle
+import numpy as np
 import pandas as pd
+import text_preprocessing
 from xml.dom import minidom
 from sklearn.svm import SVC
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.metrics import accuracy_score, classification_report
@@ -37,7 +40,7 @@ def Tfidf_Vectorization(sms_data):
     2. Convert bag of words representation into tfidf vectorized representation for each message
     '''
     
-    bow_transformer = CountVectorizer(analyzer=text_process).fit(sms_data['message'])
+    bow_transformer = CountVectorizer(analyzer=text_preprocessing.text_process).fit(sms_data['message'])
     bow = bow_transformer.transform(sms_data['message']) # bag of words
 
     tfidf_transformer = TfidfTransformer().fit(bow)
@@ -48,13 +51,15 @@ def Tfidf_Vectorization(sms_data):
 def main():
     
     messages = pd.read_csv("output/processed_msgs.csv")    
-    messages2 = load_messages2()
-    sms_data = pd.concat([messages, messages2]) # concatenate messages1 and messages2 to form our new dataset
+    messages2 = load_messages2() 
+    sms_data = pd.concat([messages, messages2]) # concatenate messages1 and messages2 to create a common tfidf feature vector
     
-    tfidf_vect = Tfidf_Vectorization(sms_data)
+    tfidf_vect = Tfidf_Vectorization(sms_data) # create a large sparse tfidf feature vector
     
-    #Train Test Split
-    X_train, X_test, y_train, y_test = train_test_split(tfidf_vect, sms_data['label'], test_size=0.3, random_state=101)
+    X_train = tfidf_vect[:5572] # training set is comprised of entire UCI message dataset
+    y_train = messages['label']
+    X_test = tfidf_vect[5572:] # test set is comprised of entire Dublin spam message dataset
+    y_test = messages2['label']
     
     #SVM
     svm = SVC(C = 100, gamma = 0.01)
