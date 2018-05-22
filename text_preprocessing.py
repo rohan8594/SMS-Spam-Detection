@@ -27,14 +27,20 @@ def loadData():
 def text_process(data):
     '''
     1. remove punc
-    2. remove stop words
-    3. return list of clean text words
+    2. do stemming of words
+    3. remove stop words
+    4. return list of clean text words
     '''
-    
     nopunc = [c for c in data if c not in string.punctuation] #remove punctuations
     nopunc = ''.join(nopunc)
     
-    clean_msgs = [word for word in nopunc.split() if word.lower() not in stopwords.words('english')] # remove stopwords
+    stemmed = ''
+    nopunc = nopunc.split()
+    for i in nopunc:
+        stemmer = SnowballStemmer('english')
+        stemmed += (stemmer.stem(i)) + ' ' # stemming of words
+        
+    clean_msgs = [word for word in stemmed.split() if word.lower() not in stopwords.words('english')] # remove stopwords
     
     return clean_msgs
 
