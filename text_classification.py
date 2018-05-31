@@ -9,8 +9,9 @@
 #              representation. Then we split the tfidf feature vector into training and test sets, 
 #              build our classifier on the training set, and test it on the test set.  
 
-import pandas as pd
 import pickle
+import numpy as np
+import pandas as pd
 import text_preprocessing
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
@@ -41,7 +42,7 @@ def Tfidf_Vectorization(messages):
     tfidf_transformer = TfidfTransformer().fit(bow)
     tfidf_vect = tfidf_transformer.transform(bow) # tfidf vector representation
     
-    pickle.dump(tfidf_vect, open("output/tfidf_vector.pickle", "wb")) # stores tfidf vector in a pickle file so it could be used later in future scripts
+    pickle.dump(tfidf_vect, open("output/tfidf_vector.pickle", "wb")) # stores tfidf vector in a pickle file so tha it can be be used later in other scripts
     
     return tfidf_vect
 

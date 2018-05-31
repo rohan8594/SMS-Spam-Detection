@@ -54,20 +54,10 @@ def main():
     tfidf_vect = Tfidf_Vectorization(balanced_data)
 
     # append our message length feature to the tfidf vector to produce the final feature vector we fit into our classifiers
-    len_feature = messages['length'].as_matrix()
+    len_feature = balanced_data['length'].as_matrix()
     feat_vect = np.hstack((tfidf_vect.todense(), len_feature[:, None]))
     
     X_train, X_test, y_train, y_test = train_test_split(feat_vect, balanced_data['label'], test_size=0.3, random_state=101)
-    
-    #SVM
-    svm = SVC(C = 100, gamma = 0.01)
-    svm.fit(X_train, y_train)
-    pred = svm.predict(X_test)
-    
-    print('\n################# SVM #################\n')
-    print(classification_report(y_test, pred))
-    print('\n')
-    print(accuracy_score(y_test, pred))
     
     #Multinomial Naive Bayes
     mnb = MultinomialNB(alpha = 0.10000000000000001)
@@ -75,6 +65,16 @@ def main():
     pred = mnb.predict(X_test)
     
     print('\n################# Multinomial NB #################\n')
+    print(classification_report(y_test, pred))
+    print('\n')
+    print(accuracy_score(y_test, pred))
+    
+    #SVM
+    svm = SVC(kernel = 'linear', gamma = 1)
+    svm.fit(X_train, y_train)
+    pred = svm.predict(X_test)
+    
+    print('\n################# SVM #################\n')
     print(classification_report(y_test, pred))
     print('\n')
     print(accuracy_score(y_test, pred))

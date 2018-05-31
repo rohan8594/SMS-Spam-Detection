@@ -32,6 +32,7 @@ def load_messages2():
     
     messages2 = pd.DataFrame(data=sms_list, columns=['message'])
     messages2['label'] = 'spam'
+    messages2['length'] = messages2['message'].apply(len)
     return messages2
 
 def Tfidf_Vectorization(sms_data):
@@ -57,7 +58,7 @@ def main():
     tfidf_vect = Tfidf_Vectorization(sms_data) # create a large sparse tfidf feature vector
 
     # append our message length feature to the tfidf vector to produce the final feature vector we fit into our classifiers
-    len_feature = messages['length'].as_matrix()
+    len_feature = sms_data['length'].as_matrix()
     feat_vect = np.hstack((tfidf_vect.todense(), len_feature[:, None]))
     
     X_train = feat_vect[:5572] # training set is comprised of entire UCI message dataset
@@ -65,22 +66,22 @@ def main():
     X_test = feat_vect[5572:] # test set is comprised of entire Dublin spam message dataset
     y_test = messages2['label']
     
-    #SVM
-    svm = SVC(C = 100, gamma = 0.01)
-    svm.fit(X_train, y_train)
-    pred = svm.predict(X_test)
-    
-    print('\n################# SVM #################\n')
-    print(classification_report(y_test, pred))
-    print('\n')
-    print(accuracy_score(y_test, pred))
-    
     #Multinomial Naive Bayes
     mnb = MultinomialNB(alpha = 0.10000000000000001)
     mnb.fit(X_train, y_train)
     pred = mnb.predict(X_test)
     
     print('\n################# Multinomial NB #################\n')
+    print(classification_report(y_test, pred))
+    print('\n')
+    print(accuracy_score(y_test, pred))
+    
+    #SVM
+    svm = SVC(kernel = 'linear', gamma = 1)
+    svm.fit(X_train, y_train)
+    pred = svm.predict(X_test)
+    
+    print('\n################# SVM #################\n')
     print(classification_report(y_test, pred))
     print('\n')
     print(accuracy_score(y_test, pred))

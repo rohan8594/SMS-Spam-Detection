@@ -59,7 +59,7 @@ def learning_curve(feature_vect, messages, folds):
 	y = train_error
 	z = cv_error
 
-	fig = plt.figure(figsize=(13,8))
+	fig = plt.figure(figsize=(10,5))
 	plt.plot(x,y, label='Training error')
 	plt.plot(x,z,'g-', label='Cross-Validation error')
 	plt.xlabel('Training Set Size')
@@ -70,12 +70,12 @@ def learning_curve(feature_vect, messages, folds):
 
 def main():
 
-	tfidf_vect = pickle.load(open("output/tfidf_vector.pickle", "rb"))
+	tfidf_vect = pickle.load(open("output/tfidf_vector.pickle", "rb")) # load previously generated tf-idf vector from pickle file
 	messages = pd.read_csv('output/processed_msgs.csv')
 
 	# append our message length feature to the tfidf vector to produce the final feature vector we fit into our classifiers
-    len_feature = messages['length'].as_matrix()
-    feat_vect = np.hstack((tfidf_vect.todense(), len_feature[:, None]))
+	len_feature = messages['length'].as_matrix()
+	feat_vect = np.hstack((tfidf_vect.todense(), len_feature[:, None]))
 
 	learning_curve(feat_vect, messages, folds = 5)
 	#learning_curve(feat_vect, messages, folds = 10)

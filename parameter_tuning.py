@@ -21,9 +21,9 @@ from sklearn.metrics import classification_report, accuracy_score
 def SVM_Tuning(X_train, X_test, y_train, y_test):
 
 	print('\n############### SVM ###############\n')
-	param_grid = {'C':[0.1,1,10,100,1000],'gamma':[1,0.1,0.01,0.001,0.0001]}
+	param_grid = {'kernel':['sigmoid','rbf','linear'],'gamma':[1,0.1,0.01]}
 
-	model = GridSearchCV(SVC(), param_grid, verbose = 1)
+	model = GridSearchCV(SVC(), param_grid, verbose = 3)
 	model.fit(X_train, y_train)
 
 	print('\nBest parameter:', model.best_params_)
@@ -68,12 +68,12 @@ def DTree_Tuning(X_train, X_test, y_train, y_test):
 
 def main():
 
-	tfidf_vect = pickle.load(open("output/tfidf_vector.pickle", "rb"))
+	tfidf_vect = pickle.load(open("output/tfidf_vector.pickle", "rb")) # load previously generated tf-idf vector from pickle file
 	messages = pd.read_csv('output/processed_msgs.csv')
 
 	# append our message length feature to the tfidf vector to produce the final feature vector we fit into our classifiers
-    len_feature = messages['length'].as_matrix()
-    feat_vect = np.hstack((tfidf_vect.todense(), len_feature[:, None]))
+	len_feature = messages['length'].as_matrix()
+	feat_vect = np.hstack((tfidf_vect.todense(), len_feature[:, None]))
 
 	X_train, X_test, y_train, y_test = train_test_split(feat_vect, messages['label'], test_size = 0.3, random_state = 101)
 
