@@ -54,7 +54,6 @@ messages that were found to have a shorter length than the spam messages which a
 the second peak. As a result, an important step in feature engineering was to add message length as a
 new feature in the dataset. Another important step was organizing the entire message dataset into a
 pandas dataframe. This made data manipulation a lot easier for the entire course of the project.
-
 ![Distribution of Msg Length](https://github.com/rohan8594/SMS-Spam-Detection/blob/master/output/Histogram1.png)
 
 ### 3.2 Text Pre-processing and Transformation
