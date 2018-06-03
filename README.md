@@ -1,4 +1,4 @@
-# SMS Spam Detection Using Machine Learning and Text Mining
+# SMS Spam Detection Using Machine Learning
 
 ## 1. Introduction
 
