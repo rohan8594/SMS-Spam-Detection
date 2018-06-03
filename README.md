@@ -1,3 +1,5 @@
+# SMS Spam Detection Using Machine Learning and Text Mining
+
 ## 1. Introduction
 
 SMS Spam is defined as unwanted text messages that are often used for spreading unwanted ads.
