@@ -23,11 +23,11 @@ $ pip install scikit-learn
 c) Run various scripts
 
 ```
-$ python3 read_data.py
-$ python3 text_preprocessing.py
-$ python3 text_classification.py
-$ python3 parameter_tuning.py
-$ python3 learning_curve.py
-$ python3 check_bias.py
-$ python3 address_imbalance.py
+$ python3 src/read_data.py
+$ python3 src/text_preprocessing.py
+$ python3 src/text_classification.py
+$ python3 src/parameter_tuning.py
+$ python3 src/learning_curve.py
+$ python3 src/check_bias.py
+$ python3 src/address_imbalance.py
 ```
